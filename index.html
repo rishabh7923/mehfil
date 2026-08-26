@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mehfil</title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/room.css">
+</head>
+
+<body>
+    <div class="room-page">
+        <header class="room-navbar">
+            <div class="brand-wrapper">
+                <a href="/">
+                    <img src="assets/logo.png" style="height:40px;" alt="Mehfil Logo">
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="room-url-tag">
+                    <span class="material-symbols-outlined">language</span>
+                    <span id="room-code-display">mehfil.today/test</span>
+                    <button id="btn-share-room">
+                        <span class="material-symbols-outlined">content_copy</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <aside class="sidebar">
+                <div class="current-playback">
+                    <div class="current-video">
+                        <div class="video-wrapper">
+                            <iframe id="youtube-player-container" frameborder="0" allowfullscreen="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" title="Janam Janam Full Video, Arijit Singh - Dilwale | Shah Rukh Khan | Kajol | Antara Mitra |Pritam" width="100%" height="100%" src="https://www.youtube.com/embed/?autoplay=1&amp;controls=1&amp;modestbranding=1&amp;rel=0&amp;enablejsapi=1&amp;origin=http%3A%2F%2F192.168.1.47%3A3000&amp;widgetid=1&amp;forigin=http%3A%2F%2F192.168.1.47%3A3000%2Froom%2FMEHFIL&amp;aoriginsup=1&amp;gporigin=http%3A%2F%2F192.168.1.47%3A3000%2F&amp;vf=6"></iframe>
+                        </div>
+                    </div>
+
+                    <div class="current-info">
+                        <h2 id="current-song-title">Naino Vale Ne Cheda Man Ka Pyala</h2>
+
+                        <div class="current-song-source">
+                            <span class="material-symbols-outlined">smart_display</span>
+                            <span id="current-song-artist">Sony Music India</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="queue-list" class="queue-container">
+                    <div class="queue-item active">
+                        <span class="material-symbols-outlined queue-row-icon">music_note</span>
+                        <div class="queue-item-title">
+                            Full Video: CHALE AANA | De De Pyaar De I Ajay Devgn, Tabu, Rakul Preet l Armaan M, Amaal M,Kunaal V
+                        </div>
+                        <div class="queue-item-time">4:14</div>
+                    </div>
+
+                    <div class="queue-item">
+                        <span class="material-symbols-outlined queue-row-icon">music_note</span>
+                        <div class="queue-item-title">
+                            Chale Ana | Juda Jum Hogaya Mana
+                        </div>
+                        <div class="queue-item-time">2:04</div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="content" style="background-color: blue;">
+                <nav class="tabs">
+
+                </nav>
+
+                <div class="content-boody">
+
+                </div>
+            </section>
+        </main>
+
+        <footer class="player">
+            PLAYER
+        </footer>
+    </div>
+</body>
+
+</html>
