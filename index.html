@@ -36,7 +36,12 @@
                 <div class="current-playback">
                     <div class="current-video">
                         <div class="video-wrapper">
-                            <iframe id="youtube-player-container" frameborder="0" allowfullscreen="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" title="Janam Janam Full Video, Arijit Singh - Dilwale | Shah Rukh Khan | Kajol | Antara Mitra |Pritam" width="100%" height="100%" src="https://www.youtube.com/embed/?autoplay=1&amp;controls=1&amp;modestbranding=1&amp;rel=0&amp;enablejsapi=1&amp;origin=http%3A%2F%2F192.168.1.47%3A3000&amp;widgetid=1&amp;forigin=http%3A%2F%2F192.168.1.47%3A3000%2Froom%2FMEHFIL&amp;aoriginsup=1&amp;gporigin=http%3A%2F%2F192.168.1.47%3A3000%2F&amp;vf=6"></iframe>
+                            <iframe id="youtube-player-container" frameborder="0" allowfullscreen=""
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                title="Janam Janam Full Video, Arijit Singh - Dilwale | Shah Rukh Khan | Kajol | Antara Mitra |Pritam"
+                                width="100%" height="100%"
+                                src="https://www.youtube.com/embed/?autoplay=1&amp;controls=1&amp;modestbranding=1&amp;rel=0&amp;enablejsapi=1&amp;origin=http%3A%2F%2F192.168.1.47%3A3000&amp;widgetid=1&amp;forigin=http%3A%2F%2F192.168.1.47%3A3000%2Froom%2FMEHFIL&amp;aoriginsup=1&amp;gporigin=http%3A%2F%2F192.168.1.47%3A3000%2F&amp;vf=6"></iframe>
                         </div>
                     </div>
 
@@ -55,7 +60,8 @@
                     <div class="queue-item active">
                         <span class="material-symbols-outlined queue-row-icon">music_note</span>
                         <div class="queue-item-title">
-                            Full Video: CHALE AANA | De De Pyaar De I Ajay Devgn, Tabu, Rakul Preet l Armaan M, Amaal M,Kunaal V
+                            Full Video: CHALE AANA | De De Pyaar De I Ajay Devgn, Tabu, Rakul Preet l Armaan M, Amaal
+                            M,Kunaal V
                         </div>
                         <div class="queue-item-time">4:14</div>
                     </div>
@@ -70,19 +76,67 @@
                 </div>
             </aside>
 
-            <section class="content" style="background-color: blue;">
+            <section class="content">
                 <nav class="tabs">
+                    <button id="tab-youtube" class="tab-item active">
+                        <span class="material-symbols-outlined">search</span>
+                        Youtube
+                    </button>
 
+                    <button id="tab-users" class="tab-item">
+                        <span class="material-symbols-outlined">group</span>
+                        Users
+                    </button>
                 </nav>
 
-                <div class="content-boody">
+                <div class="content-body">
+                    <div id="youtube-content">
+                        YOUTUBE
+                    </div>
 
+                    <div id="users-content" hidden>
+                        USERS
+                    </div>
                 </div>
             </section>
         </main>
 
         <footer class="player">
-            PLAYER
+            <div class="control-left">
+                <button id="btn-power">
+                    <span class="material-symbols-outlined">power_settings_new</span>
+                </button>
+                <div style="height: 24px; width: 1px; background-color: var(--surface-border);"></div>
+                <button>
+                    <span class="material-symbols-outlined">volume_up</span>
+                </button>
+            </div>
+            <div class="control-center">
+                <button>
+                    <span class="material-symbols-outlined">skip_previous</span>
+                </button>
+
+                <button>
+                    <span class="material-symbols-outlined">play_arrow</span>
+                </button>
+
+                <button>
+                    <span class="material-symbols-outlined">skip_next</span>
+                </button>
+            </div>
+            <div class="control-right">
+                <button>
+                    <span class="material-symbols-outlined">desktop_windows</span>
+                </button>
+
+                <button>
+                    <span class="material-symbols-outlined">repeat</span>
+                </button>
+
+                <button>
+                    <span class="material-symbols-outlined">shuffle</span>
+                </button>
+            </div>
         </footer>
     </div>
 </body>
