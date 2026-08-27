@@ -26,8 +26,8 @@
   --surface-border: #E5E5E5;
   --border-subtle: #E5E5E5;
 
-  --font-body: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Hanken Grotesk", sans-serif;
+  --font-heading: "Hanken Grotesk", sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   --radius-sm: 0.125rem;
@@ -75,6 +75,7 @@ body {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
 }
 
+/* Headings */
 h1,
 h2,
 h3,
@@ -85,4 +86,63 @@ h6 {
   color: var(--text-primary);
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-border);
+  background: var(--surface-container-lowest);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn:hover {
+  background: var(--surface-variant);
+  color: var(--text-primary);
+}
+
+.btn-primary {
+  background: var(--active-state);
+  color: #ffffff;
+  border-color: var(--active-state);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #00530e;
+  border-color: #00530e;
+  color: #ffffff;
+}
+
+
+/* Inputs */
+.input-field {
+  width: 100%;
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.input-field:focus {
+  border-color: var(--active-state);
+}
+
+.input-field::placeholder {
+  color: var(--text-secondary);
 }

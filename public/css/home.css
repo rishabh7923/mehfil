@@ -1,0 +1,61 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--background);
+    overflow: hidden;
+}
+
+/* Hero Section */
+.hero-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.hero-image {
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 580px;
+    margin-bottom: 40px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.app-preview {
+    width: 80%;
+    margin: auto auto;
+    border: 2px solid grey;
+    border-radius: 10px;
+}
+
+.room-launcher {
+    display: flex;
+
+    .room-launcher__button {
+        border-radius: 0;
+        border-width: 1px 1px 1px 0px;
+        border-color: var(--border-subtle);
+    }
+
+    .room-launcher__input {
+        width: 300px;
+        border-radius: 0;
+        border-width: 1px 0px 1px 1px;
+        border-color: var(--border-subtle);
+        border-style: solid;
+    }
+}

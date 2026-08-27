@@ -7,8 +7,8 @@
 
     <title>Mehfil</title>
 
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/room.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/room.css">
 </head>
 
 <body>
@@ -16,17 +16,14 @@
         <header class="room-navbar">
             <div class="brand-wrapper">
                 <a href="/">
-                    <img src="assets/logo.png" style="height:40px;" alt="Mehfil Logo">
+                    <img src="/assets/neutral-logo.png" style="height:40px;" alt="Mehfil Logo">
                 </a>
             </div>
 
             <div class="nav-actions">
                 <div class="room-url-tag">
                     <span class="material-symbols-outlined">language</span>
-                    <span id="room-code-display">mehfil.today/test</span>
-                    <button id="btn-share-room">
-                        <span class="material-symbols-outlined">content_copy</span>
-                    </button>
+                    <span id="room-code-display">mehfil.today/<b>test</b></span>
                 </div>
             </div>
         </header>
@@ -335,6 +332,11 @@
         </main>
 
         <footer class="player">
+            <div class="global-progress-track">
+                <div id="global-progress-fill" class="global-progress-fill" style="width: 32.8755%;"></div>
+            </div>
+
+
             <div class="control-left">
                 <button id="btn-power" class="btn-player">
                     <span class="material-symbols-outlined">power_settings_new</span>
