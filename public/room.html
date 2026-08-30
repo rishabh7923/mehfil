@@ -9,6 +9,8 @@
 
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/room.css">
+
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -75,19 +77,19 @@
 
             <section class="content">
                 <nav class="tabs">
-                    <button id="tab-youtube" class="tab-item active">
+                    <button class="tab-item active" role="tab" data-tab="youtube">
                         <span class="material-symbols-outlined">search</span>
                         Youtube
                     </button>
 
-                    <button id="tab-users" class="tab-item">
+                    <button class="tab-item" role="tab" data-tab="users">
                         <span class="material-symbols-outlined">group</span>
                         Users
                     </button>
                 </nav>
 
                 <div class="content-body">
-                    <div id="youtube-content">
+                    <div id="tab-youtube" class="tab-content" role="tabpanel">
                         <div class="search-input-wrapper">
                             <input type="text" placeholder="Enter URL or Song Name">
                             <span class="material-symbols-outlined">search</span>
@@ -324,8 +326,12 @@
                         </div>
                     </div>
 
-                    <div id="users-content" hidden>
-                        USERS
+                    <div id="tab-users" class="tab-content" role="tabpanel" hidden>
+                        <div class="users-list">
+                            <div class="user-row">
+                                
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -374,6 +380,9 @@
             </div>
         </footer>
     </div>
+
+
+    <script src="/js/room.js" type="module"></script>
 </body>
 
 </html>
