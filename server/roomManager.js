@@ -54,6 +54,24 @@ export class RoomManager {
         return user
     }
 
+    removeUser(roomCode, socketId) {
+        const room = this.getRoom(roomCode)
+        if (!room) return null
+
+        const user = room.users.get(socketId)
+        if (!user) return null
+
+        room.users.delete(socketId)
+
+        if (user.isHost && room.users.size > 0) {
+            const nextUser = Array.from(room.users.values()).sort((a, b) => a.joinedAt - b.joinedAt)[0]
+            nextUser.isHost = true
+            room.hostId = nextUser.id
+        }
+        
+        return user
+    }
+
     getCurrentPlaybackPosition(roomCode) {
         const room = this.getRoom(roomCode)
         if (!room || !room.playbackState || !room.currentSong) return 0

@@ -56,6 +56,8 @@ async function connectAndInitRoom() {
         hostId = newHostId
         currentUsersList = users || []
 
+        console.log(currentUsersList)
+
         renderUsersList(currentUsersList, currentUserId, hostId)
     })
 }

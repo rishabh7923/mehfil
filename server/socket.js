@@ -11,7 +11,6 @@ export function setupSocketIO(io) {
             }
 
             const room = roomManager.getRoom(roomCode)
-            console.log(room, roomCode)
             
             if (!room) {
                 if (callback) callback({ error: "Room not found" })
@@ -24,7 +23,7 @@ export function setupSocketIO(io) {
                 return
             }
 
-            socket.roomCode = room.roomCode
+            socket.roomCode = room.code
             socket.userId = user.id
 
             socket.join(room.code)
@@ -36,6 +35,24 @@ export function setupSocketIO(io) {
                 users: roomData.users,
                 hostId: roomData.hostId /* why do we need it here */
             })
+        })
+
+
+        socket.on("disconnect", () => {
+            console.log(`[Socket] Client diconnected ${socket.id}`)
+
+            if (socket.roomCode) {
+                const result = roomManager.removeUser(socket.roomCode, socket.id)
+                if (result) {
+                    const roomData = roomManager.getPublicRoomData(socket.roomCode)
+                    if (roomData) {
+                        io.to(socket.roomCode).emit("room:users", {
+                            users: roomData.users,
+                            hostId: roomData.hostId
+                        })
+                    }
+                }
+            }
         })
     })
 }
