@@ -31,6 +31,35 @@ export class RoomManager {
         return this.rooms.get(roomCode.toUpperCase()) || null
     }
 
+    addSong(roomCode, song, user) {
+        const room = this.getRoom(roomCode)
+        if (!room) return null
+
+        const queueItem = {
+            id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+            ...song,
+            addedBy: {
+                id: user.id,
+                name: user.name
+            },
+            addedAt: Date.now()
+        }
+
+        if (!room.currentSong && room.queue.length === 0) {
+            room.currentSong = queueItem;
+            room.playbackState = {
+                videoId: queueItem.videoId,
+                startedAt: Date.now(),
+                pausedAt: 0,
+                isPlaying: true
+            }
+        } else {
+            room.queue.push(queueItem)
+        }
+
+        return queueItem
+    }
+
     addUser(roomCode, socketId, userId, userName) {
         const room = this.rooms.get(roomCode)
         if (!room) return null

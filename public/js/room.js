@@ -1,6 +1,6 @@
 import { getOrCreateUserId, getRoomCodeFromUrl, getStoredUsername } from "./config.js"
-import { getSocket, joinRoom } from "./socket.js"
-import { renderUsersList } from "./ui.js"
+import { addSongToQueue, getSocket, joinRoom } from "./socket.js"
+import { renderQueue, renderSearchResults, renderUsersList } from "./ui.js"
 
 let roomCode = null
 let currentUserId = null
@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
     connectAndInitRoom()
     setupEventListeners()
 })
+
+async function handleAddSong(song) {
+    const res = await addSongToQueue(roomCode, song)
+}
 
 async function connectAndInitRoom() {
     const socket = getSocket()
@@ -51,18 +55,39 @@ async function connectAndInitRoom() {
     //Show toast "Connected to room ${roomCode}"
     
     renderUsersList(currentUsersList, currentUserId, hostId)
+    renderQueue(currentQueue, currentSong, currentUserId, hostId)
 
     socket.on("room:users", ({ users, hostId: newHostId }) => {
         hostId = newHostId
         currentUsersList = users || []
 
-        console.log(currentUsersList)
-
         renderUsersList(currentUsersList, currentUserId, hostId)
+    })
+
+    socket.on("queue:update", ({ queue, currentSong: newSong, playbackState }) => {
+        currentQueue = queue || []
+        currentSong = newSong
+
+
+        renderQueue(currentQueue, currentSong, currentUserId, hostId) //handleRemoveSong, handleReorderQueue
     })
 }
 
 function setupEventListeners() {
+    /* Event Listener for Searching */
+    const searchYoutube = document.getElementById("search-youtube")
+
+    searchYoutube.addEventListener("submit", async (e) => {
+        e.preventDefault()
+        const query = searchYoutube.elements.query.value
+        if (!query.trim()) return;
+
+        const res = await fetch(`/api/search?q=${query}`, { method: "GET" })
+        const data = await res.json()
+
+        renderSearchResults(data.results, handleAddSong)
+    })
+
     const tabs = document.querySelectorAll(".tab-item")
     const tabContents = document.querySelectorAll(".tab-content")
 

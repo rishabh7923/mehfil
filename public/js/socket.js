@@ -16,3 +16,17 @@ export function joinRoom({ roomCode, userId, userName}) {
         })
     })
 }
+
+export function addSongToQueue(roomCode, song) {
+    return new Promise((resolve, reject) => {
+        if (!socket) return reject(new Error("Socket not initialized"))
+
+        socket.emit("queue:add", { roomCode, song }, (response) => {
+            if (response && response.error) {
+                reject(new Error(response.error))
+            } else {
+                resolve(response)
+            }
+        })
+    })
+}

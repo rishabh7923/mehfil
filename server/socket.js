@@ -37,6 +37,37 @@ export function setupSocketIO(io) {
             })
         })
 
+        socket.on("queue:add", ({ roomCode, song }, callback) => {
+            const code = roomCode || socket.roomCode
+            const room = roomManager.getRoom(code)
+
+            if (!room) {
+                if (callback) callback({ error: "Room not found" })
+                return
+            }
+
+            const user = room.users.get(socket.id)
+
+            if (!song || !song.videoId) {
+                if (callback) callback({ error: "Invalid song data" })
+                return
+            }
+
+            const result = roomManager.addSong(code, song, user)
+            if (!result) return callback?.({ error: "Failed to add song to queue "});
+
+            const roomData = roomManager.getPublicRoomData(code)
+            console.log(roomData)
+
+            io.to(code).emit("queue:update", {
+                queue: roomData.queue,
+                currentSong: roomData.currentSong,
+                playbackState: roomData.playbackState
+            })
+
+            callback?.({ success: true, })
+        })
+
 
         socket.on("disconnect", () => {
             console.log(`[Socket] Client diconnected ${socket.id}`)

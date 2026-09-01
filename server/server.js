@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import { createServer } from "node:http"
 import { Server } from "socket.io"
 import { setupSocketIO } from "./socket.js"
+import { searchYoutube } from "./youtube.js"
 
 dotenv.config()
 
@@ -47,6 +48,23 @@ app.get('/room/:roomCode', (req, res) => {
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(rootDir, 'public', 'index.html'))
+})
+
+/**
+ * GET /api/search
+ * Get search results from youtube
+ */
+app.get("/api/search", async (req, res, next) => {
+    const query = req.query.q || ""
+    if (!query.trim()) return res.status(400).json({ error: "Search query paramter 'q' is required" })
+
+    const results = await searchYoutube(query)
+    
+    res.json({
+        success: true,
+        query: query.trim(),
+        results
+    })
 })
 
 
