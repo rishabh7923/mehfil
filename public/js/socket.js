@@ -30,3 +30,21 @@ export function addSongToQueue(roomCode, song) {
         })
     })
 }
+
+export function emitPlayerPlay(roomCode, position) {
+    socket?.emit("player:play", { roomCode, position })
+}
+
+export function emitPlayerPause(roomCode, position) {
+    socket?.emit("player:pause", { roomCode, position })
+}
+
+export function emitPlayerSeek(roomCode, position) {
+    socket?.emit("player:seek", { roomCode, position })
+}
+
+export function emitPlayerNext(roomCode) {
+    return new Promise((resolve) => {
+        socket?.emit("player:next", { roomCode }, (res) => resolve(res))
+    })
+}

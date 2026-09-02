@@ -1,6 +1,7 @@
 import { getOrCreateUserId, getRoomCodeFromUrl, getStoredUsername } from "./config.js"
-import { addSongToQueue, getSocket, joinRoom } from "./socket.js"
+import { addSongToQueue, emitPlayerNext, getSocket, joinRoom } from "./socket.js"
 import { renderQueue, renderSearchResults, renderUsersList } from "./ui.js"
+import { initYoutubePlayer, syncPlayerWithServer } from "./player.js"
 
 let roomCode = null
 let currentUserId = null
@@ -45,6 +46,7 @@ async function connectAndInitRoom() {
     }
 
     const { user, roomData } = response
+    console.log(roomData)
 
     isHost = user.isHost
     hostId = roomData.hostId
@@ -53,9 +55,14 @@ async function connectAndInitRoom() {
     currentUsersList = roomData.users || []
 
     //Show toast "Connected to room ${roomCode}"
+
+    await initYoutubePlayer(roomCode, () => {
+        emitPlayerNext(roomCode)
+    })
     
     renderUsersList(currentUsersList, currentUserId, hostId)
     renderQueue(currentQueue, currentSong, currentUserId, hostId)
+    syncPlayerWithServer(currentSong, roomData.playbackState)
 
     socket.on("room:users", ({ users, hostId: newHostId }) => {
         hostId = newHostId
@@ -68,8 +75,13 @@ async function connectAndInitRoom() {
         currentQueue = queue || []
         currentSong = newSong
 
-
         renderQueue(currentQueue, currentSong, currentUserId, hostId) //handleRemoveSong, handleReorderQueue
+        syncPlayerWithServer(currentSong, playbackState)
+    })
+
+    socket.on("player:state", ({ playbackState, currentSong: newSong }) => {
+        currentSong = newSong
+        syncPlayerWithServer(currentSong, playbackState)
     })
 }
 

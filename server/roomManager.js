@@ -134,6 +134,57 @@ export class RoomManager {
             createdAt: room.createdAt
         }
     }
+
+    updatePlayback(roomCode, { action, position = 0, isPlaying }) {
+        const room = this.getRoom(roomCode)
+        if (!room || !room.currentPosition) return null
+
+        const now = Date.now()
+
+        if (action === "play") {
+            room.playbackState.isPlaying = true
+            room.playbackState.startedAt = now - Math.floor(position * 100)
+            room.playbackState.pausedAt = position
+        } else if (action === "pause") {
+            room.playbackState.isPlaying = false
+            room.playbackState.pausedAt = position
+            room.playbackState.startedAt = null
+        } else if (action == "seek") {
+            room.playbackState.pausedAt = position
+            if (room.playbackState.isPlaying) {
+                room.playbackState.startedAt = now - Math.floor(position * 100)
+            }
+        }
+
+        return room.playbackState
+    }
+
+    skipSong(roomCode) {
+        const room = this.getRoom(roomCode);
+        if (!room) return null;
+
+        const previousSong = room.currentSong
+
+        if (room.queue.length > 0) {
+            room.currentSong = room.queue.shift()
+            room.playbackState = {
+                videoId: room.currentSong.videoId,
+                startedAt: Date.now(),
+                pausedAt: 0,
+                isPlaying: true
+            }
+        } else  {
+            room.currentSong = null
+            room.playbackState = {
+                videoId: null,
+                startedAt: null,
+                pausedAt: 0,
+                isPlaying: false
+            }
+        }
+
+        return { previousSong, currentSong: room.currentSong }
+    }
 }
 
 export const roomManager = new RoomManager()

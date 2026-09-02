@@ -68,6 +68,86 @@ export function setupSocketIO(io) {
             callback?.({ success: true, })
         })
 
+        socket.on("player:play", ({ roomCode, position = 0 }) => {
+            const code = roomCode || socket.roomCode
+            const room = roomManager.getRoom(code)
+            if (!room || !room.currentSong) return
+
+            const user = room.users.get(socket.id)
+            const updatedState = roomManager.updatePlayback(code, { action: "play", position, isPlaying: true })
+
+            if (updatedState) {
+                io.to(code).emit("player:state", {
+                    playbackState: {
+                        ...updatedState,
+                        currentPosition: position
+                    },
+                    currentSong: room.currentSong,
+                    triggerdBy: user?.name || "System"
+                })
+            }
+        })
+
+        socket.on("player:seek", ({ roomCode, position = 0 }) => {
+            const code = roomCode || socket.roomCode
+            const room = roomManager.getRoom(code)
+            if (!room || !room.currentSong) return
+
+            const user = room.users.get(socket.id)
+            const updatedState = roomManager.updatePlayback(code, { action: "seek", position })
+
+            if (updatedState) {
+                io.to(code).emit("player:state", {
+                    playbackState: {
+                        ...updatedState,
+                        currentPosition: position
+                    },
+                    currentSong: room.currentSong,
+                    triggerdBy: user?.name || "System"
+                })
+            }
+        })
+
+        socket.on("player:pause", ({ roomCode, position = 0 }) => {
+            const code = roomCode || socket.roomCode
+            const room = roomManager.getRoom(code)
+            if (!room || !room.currentSong) return
+
+            const user = room.users.get(socket.id)
+            const updatedState = roomManager.updatePlayback(code, { action: "pause", position, isPlaying: false })
+
+            if (updatedState) {
+                io.to(code).emit("player:state", {
+                    playbackState: {
+                        ...updatedState,
+                        currentPosition: position
+                    },
+                    currentSong: room.currentSong,
+                    triggerdBy: user?.name || "System"
+                })
+            }
+        })
+
+        socket.on("player:next", ({ roomCode }, callback) => {
+            const code = roomCode || socket.roomCode
+            const room = roomManager.getRoom(code)
+
+            if (!room) return null
+
+            const user = room.users.get(socket.id)
+            const { previousSong, currentSong } = roomManager.skipSong(code);
+
+            const roomData = roomManager.getPublicRoomData(code);
+
+            io.to(code).emit("queue:update", {
+                queue: roomData.queue,
+                currentSong: roomData.currentSong,
+                playbackState: roomData.playbackState
+            })
+
+            callback?.({ success: true, currentSong })
+        })
+
 
         socket.on("disconnect", () => {
             console.log(`[Socket] Client diconnected ${socket.id}`)

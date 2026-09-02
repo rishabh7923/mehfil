@@ -1,6 +1,4 @@
-export function renderQueue(queue, currentSong, currentUserId, hostId, onRemoveCallback) {
-    console.log({ queue, currentSong, currentUserId, hostId, onRemoveCallback })
-    
+export function renderQueue(queue, currentSong, currentUserId, hostId, onRemoveCallback) {    
     const createQueueItem = (song, active = false) => {
         const item = document.createElement("div")
         item.classList.add("queue-item")
@@ -91,9 +89,7 @@ export function renderSearchResults(results, onAddCallback) {
 
         const btn = item.querySelector(".btn-add-track")
         btn.addEventListener("click", () => {
-            console.log(video)
             if (onAddCallback) onAddCallback(video)
-            console.log("CLICKED")
         })
 
         searchResultsContainer.append(item)
