@@ -116,6 +116,8 @@ export function setupSocketIO(io) {
             const user = room.users.get(socket.id)
             const updatedState = roomManager.updatePlayback(code, { action: "pause", position, isPlaying: false })
 
+            console.log(updatedState)
+
             if (updatedState) {
                 io.to(code).emit("player:state", {
                     playbackState: {

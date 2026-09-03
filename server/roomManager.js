@@ -137,13 +137,13 @@ export class RoomManager {
 
     updatePlayback(roomCode, { action, position = 0, isPlaying }) {
         const room = this.getRoom(roomCode)
-        if (!room || !room.currentPosition) return null
+        if (!room || !room.currentSong) return null
 
         const now = Date.now()
 
         if (action === "play") {
             room.playbackState.isPlaying = true
-            room.playbackState.startedAt = now - Math.floor(position * 100)
+            room.playbackState.startedAt = now - Math.floor(position * 1000)
             room.playbackState.pausedAt = position
         } else if (action === "pause") {
             room.playbackState.isPlaying = false
@@ -152,7 +152,7 @@ export class RoomManager {
         } else if (action == "seek") {
             room.playbackState.pausedAt = position
             if (room.playbackState.isPlaying) {
-                room.playbackState.startedAt = now - Math.floor(position * 100)
+                room.playbackState.startedAt = now - Math.floor(position * 1000)
             }
         }
 

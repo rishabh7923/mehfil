@@ -1,7 +1,7 @@
 import { getOrCreateUserId, getRoomCodeFromUrl, getStoredUsername } from "./config.js"
-import { addSongToQueue, emitPlayerNext, getSocket, joinRoom } from "./socket.js"
+import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, getSocket, joinRoom } from "./socket.js"
 import { renderQueue, renderSearchResults, renderUsersList } from "./ui.js"
-import { initYoutubePlayer, syncPlayerWithServer } from "./player.js"
+import { getCurrentPlayerTime, getPlayerDuration, initYoutubePlayer, syncPlayerWithServer } from "./player.js"
 
 let roomCode = null
 let currentUserId = null
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 async function handleAddSong(song) {
-    const res = await addSongToQueue(roomCode, song)
+    await addSongToQueue(roomCode, song)
 }
 
 async function connectAndInitRoom() {
@@ -80,6 +80,8 @@ async function connectAndInitRoom() {
     })
 
     socket.on("player:state", ({ playbackState, currentSong: newSong }) => {
+        console.log("PLAYER:UPDATE", { playbackState, newSong, })
+        
         currentSong = newSong
         syncPlayerWithServer(currentSong, playbackState)
     })
@@ -98,6 +100,44 @@ function setupEventListeners() {
         const data = await res.json()
 
         renderSearchResults(data.results, handleAddSong)
+    })
+
+
+    /* Play/Pause */
+    const playButton = document.querySelector(".btn-player-play")
+    playButton?.addEventListener("click", () => {
+        if (!currentSong) return;
+
+        const pos = getCurrentPlayerTime()
+
+        if (playButton.innerText == "pause") emitPlayerPause(roomCode, pos)
+        else emitPlayerPlay(roomCode, pos)
+    })
+
+    /* Skip */
+    const skipButton = document.getElementById("btn-player-next")
+    skipButton?.addEventListener("click", async () => {
+        await emitPlayerNext(roomCode)
+    })
+
+    /* Prev */
+    const prevButton = document.getElementById("btn-player-prev")
+    prevButton?.addEventListener("click", () => {
+        emitPlayerSeek(roomCode, 0)
+    })
+
+    /* Global Progress Bar Seek */
+    const globalProgress = document.getElementById("global-progress-bar")
+    globalProgress?.addEventListener("click", (e) => {
+        const rect = globalProgress.getBoundingClientRect()
+        const clickX = e.clientX - rect.left
+        const ratio = Math.max(0, Math.min(1, clickX / rect.width))
+        const duration = getPlayerDuration()
+
+        if (duration > 0) {
+            const targetSec = ratio * duration
+            emitPlayerSeek(roomCode, targetSec)
+        }
     })
 
     const tabs = document.querySelectorAll(".tab-item")

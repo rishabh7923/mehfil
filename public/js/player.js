@@ -1,10 +1,10 @@
-import { emitPlayerNext, emitPlayerPlay, emitPlayerPause } from "./socket.js"
+import { emitPlayerNext } from "./socket.js"
 
 let ytPlayer = null
 let currentRoomCode = null
 let currentSongId = null
-let ignoreNextStateChange = false
 let isPlayerReady = true
+let updateTimer = null
 
 let onTrackEndedCallback = null
 
@@ -31,7 +31,7 @@ function createPlayer() {
             events: {
                 onReady: () => {
                     isPlayerReady = true
-                    // startProgressUpdater
+                    startProgressUpdater()
                     resolve(ytPlayer)
                 },
                 onStateChange: handlePlayerStateChange
@@ -41,26 +41,11 @@ function createPlayer() {
 }
 
 function handlePlayerStateChange(event) {
-    if (ignoreNextStateChange) {
-        ignoreNextStateChange = false
-        return
-    }
-
     if (event.data === window.YT.PlayerState.ENDED) {
         if (onTrackEndedCallback) onTrackEndedCallback()
         else if (currentRoomCode) {
             emitPlayerNext(currentRoomCode)  
         }
-    }
-
-    if (event.data === window.YT.PlayerState.PLAYING) {
-        const pos = ytPlayer.getCurrentTime()
-        emitPlayerPlay(currentRoomCode, pos);
-    }
-
-    if (event.data === window.YT.PlayerState.PAUSED) {
-        const pos = ytPlayer.getCurrentTime()
-        emitPlayerPause(currentRoomCode, pos);
     }
 }
 
@@ -69,8 +54,7 @@ export function syncPlayerWithServer(currentSong, playbackState) {
     const songArtistEl = document.getElementById("current-song-artist")
 
     if (!currentSong || !currentSong.videoId) {
-
-
+        if (ytPlayer && isPlayerReady) ytPlayer.stopVideo()
         currentSongId = null
         return
     }
@@ -112,5 +96,38 @@ export function syncPlayerWithServer(currentSong, playbackState) {
     } else if (!isPlaying && playerState === window.YT.PlayerState.PLAYING) {
         ytPlayer.pauseVideo()
     }
+}
 
+export function getCurrentPlayerTime() {
+    if (ytPlayer && isPlayerReady) {
+        return ytPlayer.getCurrentTime();
+    }
+    return 0;
+}
+
+export function getPlayerDuration() {
+    if (ytPlayer && isPlayerReady && typeof ytPlayer.getDuration === 'function') {
+        return ytPlayer.getDuration();
+    }
+    return 0;
+}
+
+function startProgressUpdater() {
+    if (updateTimer) clearInterval(updateTimer)
+
+    const globalFill = document.getElementById("global-progress-fill")
+    const playBtnIcon = document.querySelector('.btn-player-play .material-symbols-outlined');
+
+    updateTimer = setInterval(() => {
+        if (!ytPlayer || !isPlayerReady) return
+
+        const current = getCurrentPlayerTime()
+        const duration = getPlayerDuration()
+        const percentage = duration > 0 ? Math.min(100, (current/duration) * 100) : 0
+
+        globalFill.style.width = `${percentage}%`
+        
+        const state = ytPlayer.getPlayerState()
+        playBtnIcon.textContent = (state == window.YT.PlayerState.PLAYING ? "pause" : "play_arrow")
+    }, 300)
 }
