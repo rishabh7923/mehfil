@@ -113,6 +113,7 @@ main {
         padding: 5px 8px;
         font-size: 13px;
         border-bottom: 1px solid var(--surface-border);
+        cursor: grab;
 
         .queue-item-title {
             white-space: nowrap;
@@ -120,13 +121,17 @@ main {
             text-overflow: ellipsis;
             width: 83%;
         }
-    }
 
-    .queue-item.active {
-        background-color: #069a554d;
+        &:active {
+            cursor: grabbing;
+        }
 
-        .queue-item-title {
-            font-weight: bold;
+        &.active {
+            background-color: #069a554d;
+
+            .queue-item-title {
+                font-weight: bold;
+            }
         }
     }
 }

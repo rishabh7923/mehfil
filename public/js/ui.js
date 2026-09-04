@@ -1,9 +1,13 @@
 export function renderQueue(queue, currentSong, currentUserId, hostId, onRemoveCallback) {    
-    const createQueueItem = (song, active = false) => {
+    const createQueueItem = (song, index, active = false) => {
         const item = document.createElement("div")
         item.classList.add("queue-item")
         
         if (active) item.classList.add("active")
+        else {
+            item.draggable = true
+            item.setAttribute("data-index", index)
+        }
         
         item.innerHTML = `
             <span class="material-symbols-outlined queue-row-icon">music_note</span>
@@ -15,15 +19,14 @@ export function renderQueue(queue, currentSong, currentUserId, hostId, onRemoveC
 
         return item
     }
-
     
     const queueContainer = document.getElementById("queue-list")
     queueContainer.innerHTML = ''
 
-    if (currentSong) queueContainer.append(createQueueItem(currentSong, true))
+    if (currentSong) queueContainer.append(createQueueItem(currentSong, -1, true))
 
-    queue.forEach((song) => {
-        queueContainer.append(createQueueItem(song))
+    queue.forEach((song, index) => {
+        queueContainer.append(createQueueItem(song, index))
     })
 }
 

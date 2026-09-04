@@ -31,6 +31,18 @@ export function addSongToQueue(roomCode, song) {
     })
 }
 
+export function reorderQueue(roomCode, fromIndex, toIndex) {
+    return new Promise((resolve, reject) => {
+        socket.emit('queue:reorder', { roomCode, fromIndex, toIndex }, (response) => {
+            if (response && response.error) {
+                reject(new Error(response.error));
+            } else {
+                resolve(response);
+            }
+        });
+    })
+}
+
 export function emitPlayerPlay(roomCode, position) {
     socket?.emit("player:play", { roomCode, position })
 }

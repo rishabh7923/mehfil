@@ -185,6 +185,24 @@ export class RoomManager {
 
         return { previousSong, currentSong: room.currentSong }
     }
+
+    reorderQueue(roomCode, fromIndex, toIndex) {
+        const room = this.getRoom(roomCode);
+        if (!room) return false;
+
+        if (
+            fromIndex < 0 ||
+            fromIndex >= room.queue.length ||
+            toIndex < 0 ||
+            toIndex >= room.queue.length
+        ) {
+            return false;
+        }
+
+        const [movedItem] = room.queue.splice(fromIndex, 1)
+        room.queue.splice(toIndex, 0, movedItem)
+        return true
+    }
 }
 
 export const roomManager = new RoomManager()

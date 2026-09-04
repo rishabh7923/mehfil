@@ -1,5 +1,5 @@
 import { getOrCreateUserId, getRoomCodeFromUrl, getStoredUsername } from "./config.js"
-import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, getSocket, joinRoom } from "./socket.js"
+import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, getSocket, joinRoom, reorderQueue } from "./socket.js"
 import { renderQueue, renderSearchResults, renderUsersList } from "./ui.js"
 import { getCurrentPlayerTime, getPlayerDuration, initYoutubePlayer, syncPlayerWithServer } from "./player.js"
 
@@ -138,6 +138,46 @@ function setupEventListeners() {
             const targetSec = ratio * duration
             emitPlayerSeek(roomCode, targetSec)
         }
+    })
+
+    /* Reorder Queue */
+    const queueContainer = document.getElementById("queue-list")
+    let draggedItem = null
+
+    queueContainer.addEventListener("dragstart", (e) => {
+        draggedItem = e.target
+    })
+
+    queueContainer.addEventListener("dragover", (e) => {
+        e.preventDefault()
+
+        const target = e.target.closest(".queue-item:not(.active)")
+        if (!target || target == draggedItem) return
+
+        const rect = target.getBoundingClientRect();
+        const mouseY = e.clientY;
+
+        if (mouseY < rect.top + rect.height / 2) {
+            target.after(draggedItem)
+        } else {
+            target.before(draggedItem)
+        }
+    })
+
+
+    queueContainer.addEventListener("drop", () => {
+        const items = [...document.querySelectorAll(".queue-item:not(.active)")]
+        
+        const fromIndex = draggedItem.dataset.index
+        const toIndex = items.indexOf(draggedItem)
+
+        if (fromIndex == toIndex) return
+
+        reorderQueue(roomCode, fromIndex, toIndex)
+    })
+
+    queueContainer.addEventListener("dragend", () => {
+        draggedItem = null
     })
 
     const tabs = document.querySelectorAll(".tab-item")

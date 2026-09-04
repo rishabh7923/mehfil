@@ -150,6 +150,26 @@ export function setupSocketIO(io) {
             callback?.({ success: true, currentSong })
         })
 
+        socket.on("queue:reorder", ({ roomCode, fromIndex, toIndex }, callback) => {
+            const code = roomCode || socket.roomCode;
+            const room = roomManager.getRoom(code);
+            if (!room) return;
+
+            const user = room.users.get(socket.id);
+            const success = roomManager.reorderQueue(code, fromIndex, toIndex)
+
+            if (success) {
+                const roomData = roomManager.getPublicRoomData(code)
+                io.to(code).emit("queue:update", {
+                    queue: roomData.queue,
+                    currentSong: roomData.currentSong,
+                    playbackState: roomData.playbackState
+                })
+
+                callback?.({ success: true })
+            }
+        })
+
 
         socket.on("disconnect", () => {
             console.log(`[Socket] Client diconnected ${socket.id}`)
