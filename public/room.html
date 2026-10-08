@@ -118,9 +118,13 @@
                     <span class="material-symbols-outlined">power_settings_new</span>
                 </button>
                 <div style="height: 24px; width: 1px; background-color: var(--surface-border);"></div>
-                <button class="btn-player">
-                    <span class="material-symbols-outlined">volume_up</span>
-                </button>
+                <div class="volume-control">
+                    <button class="btn-player" id="btn-volume" type="button" aria-label="Mute audio" aria-pressed="false">
+                        <span class="material-symbols-outlined" id="volume-icon">volume_up</span>
+                    </button>
+                    <input id="volume-slider" type="range" min="0" max="100" value="100"
+                        aria-label="Volume" aria-valuetext="100%">
+                </div>
             </div>
             <div class="control-center">
                 <button class="btn-player-sub" id="btn-player-prev">

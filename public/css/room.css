@@ -184,6 +184,35 @@ main {
     justify-content: center;
 }
 
+.volume-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    input[type="range"] {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        width: 18px;
+        height: 96px;
+        padding: 8px 0;
+        opacity: 0;
+        pointer-events: none;
+        accent-color: var(--active-state);
+        cursor: pointer;
+        writing-mode: vertical-lr;
+        direction: rtl;
+        transform: translateX(-50%);
+        transition: opacity 150ms ease;
+    }
+
+    &:hover input[type="range"],
+    &:focus-within input[type="range"] {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
 .global-progress-track {
     position: absolute;
     top: 0;

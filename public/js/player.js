@@ -5,6 +5,7 @@ let currentRoomCode = null
 let currentSongId = null
 let isPlayerReady = true
 let updateTimer = null
+let playerVolume = 100
 
 let onTrackEndedCallback = null
 
@@ -31,6 +32,7 @@ function createPlayer() {
             events: {
                 onReady: () => {
                     isPlayerReady = true
+                    ytPlayer.setVolume(playerVolume)
                     startProgressUpdater()
                     resolve(ytPlayer)
                 },
@@ -38,6 +40,20 @@ function createPlayer() {
             }
         })
     })
+}
+
+export function setPlayerVolume(volume) {
+    playerVolume = Math.max(0, Math.min(100, Number(volume)))
+
+    if (ytPlayer && isPlayerReady) {
+        ytPlayer.setVolume(playerVolume)
+    }
+
+    return playerVolume
+}
+
+export function getPlayerVolume() {
+    return playerVolume
 }
 
 function handlePlayerStateChange(event) {

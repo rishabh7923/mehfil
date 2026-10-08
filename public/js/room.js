@@ -1,7 +1,7 @@
 import { getOrCreateUserId, getRoomCodeFromUrl, getStoredUsername } from "./config.js"
 import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, getSocket, joinRoom, reorderQueue } from "./socket.js"
 import { renderQueue, renderSearchResults, renderUsersList } from "./ui.js"
-import { getCurrentPlayerTime, getPlayerDuration, initYoutubePlayer, syncPlayerWithServer } from "./player.js"
+import { getCurrentPlayerTime, getPlayerDuration, getPlayerVolume, initYoutubePlayer, setPlayerVolume, syncPlayerWithServer } from "./player.js"
 
 let roomCode = null
 let currentUserId = null
@@ -124,6 +124,41 @@ function setupEventListeners() {
     const prevButton = document.getElementById("btn-player-prev")
     prevButton?.addEventListener("click", () => {
         emitPlayerSeek(roomCode, 0)
+    })
+
+    /* Volume */
+    const volumeButton = document.getElementById("btn-volume")
+    const volumeIcon = document.getElementById("volume-icon")
+    const volumeSlider = document.getElementById("volume-slider")
+    let volumeBeforeMute = getPlayerVolume()
+
+    const updateVolumeIcon = (volume, muted = volume === 0) => {
+        volumeIcon.textContent = muted ? "volume_off" : volume < 50 ? "volume_down" : "volume_up"
+        volumeButton.setAttribute("aria-label", muted ? "Unmute audio" : "Mute audio")
+        volumeButton.setAttribute("aria-pressed", String(muted))
+    }
+
+    volumeSlider?.addEventListener("input", (event) => {
+        const volume = setPlayerVolume(event.target.value)
+        if (volume > 0) volumeBeforeMute = volume
+        volumeSlider.setAttribute("aria-valuetext", `${volume}%`)
+        updateVolumeIcon(volume)
+    })
+
+    volumeButton?.addEventListener("click", () => {
+        const currentVolume = getPlayerVolume()
+        if (currentVolume > 0) {
+            volumeBeforeMute = currentVolume
+            setPlayerVolume(0)
+            volumeSlider.value = "0"
+            volumeSlider.setAttribute("aria-valuetext", "0%")
+            updateVolumeIcon(0, true)
+        } else {
+            const restoredVolume = setPlayerVolume(volumeBeforeMute || 100)
+            volumeSlider.value = String(restoredVolume)
+            volumeSlider.setAttribute("aria-valuetext", `${restoredVolume}%`)
+            updateVolumeIcon(restoredVolume)
+        }
     })
 
     /* Global Progress Bar Seek */
