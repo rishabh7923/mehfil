@@ -68,13 +68,21 @@ function handlePlayerStateChange(event) {
 export function syncPlayerWithServer(currentSong, playbackState) {
     const songTitleEl = document.getElementById("current-song-title")
     const songArtistEl = document.getElementById("current-song-artist")
+    const playerContainer = document.getElementById("youtube-player-container")
+    const videoPlaceholder = document.getElementById("video-placeholder")
 
     if (!currentSong || !currentSong.videoId) {
         if (ytPlayer && isPlayerReady) ytPlayer.stopVideo()
+        playerContainer.hidden = true
+        videoPlaceholder.hidden = false
+        songTitleEl.textContent = "Nothing playing"
+        songArtistEl.textContent = "Add a song to start the mehfil"
         currentSongId = null
         return
     }
 
+    playerContainer.hidden = false
+    videoPlaceholder.hidden = true
     songTitleEl.textContent = currentSong.title
     songArtistEl.textContent = currentSong.channelTitle
 
