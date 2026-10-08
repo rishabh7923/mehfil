@@ -20,10 +20,58 @@
         align-items: center;
     }
 
+    .brand-link {
+        position: relative;
+        display: block;
+        width: 112px;
+        height: 40px;
+        overflow: hidden;
+        border-radius: var(--radius-sm);
+        isolation: isolate;
+    }
+
+    .brand-logo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: opacity 220ms ease;
+    }
+
+    .brand-logo--neutral {
+        opacity: 1;
+    }
+
+    .brand-logo--color {
+        opacity: 0;
+    }
+
+    .brand-link:hover .brand-logo--neutral,
+    .brand-link:focus-visible .brand-logo--neutral {
+        opacity: 0;
+    }
+
+    .brand-link:hover .brand-logo--color,
+    .brand-link:focus-visible .brand-logo--color {
+        opacity: 1;
+    }
+
+    .brand-link:focus-visible {
+        outline: 2px solid var(--active-state);
+        outline-offset: 3px;
+    }
+
     .nav-actions {
         display: flex;
         align-items: flex-start;
         gap: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .brand-logo {
+        transition: opacity 150ms ease;
     }
 }
 
@@ -155,6 +203,9 @@ main {
         color: var(--text-primary);
         background-color: transparent;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .btn-player-sub {
@@ -164,7 +215,10 @@ main {
         background-color: var(--surface-container);
         border-radius: 50%;
         cursor: pointer;
-        color: var(--text-secondary)
+        color: var(--text-secondary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .btn-player {
@@ -199,7 +253,7 @@ main {
         left: 50%;
         width: 18px;
         height: 96px;
-        padding: 8px 0;
+        padding: 0;
         opacity: 0;
         pointer-events: none;
         accent-color: var(--active-state);
@@ -306,7 +360,30 @@ main {
     }
 
     input:focus {
-        outline: red;
+        outline: none;
+    }
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border: 0;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+    }
+
+    button:hover,
+    button:focus-visible {
+        color: var(--text-primary);
+        background-color: var(--surface-container);
+    }
+
+    button:disabled {
+        cursor: wait;
+        opacity: 0.65;
     }
 }
 

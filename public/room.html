@@ -18,8 +18,9 @@
     <div class="room-page">
         <header class="room-navbar">
             <div class="brand-wrapper">
-                <a href="/">
-                    <img src="/assets/neutral-logo.png" style="height:40px;" alt="Mehfil Logo">
+                <a href="/" class="brand-link" aria-label="Return to Mehfil home">
+                    <img class="brand-logo brand-logo--neutral" src="/assets/neutral-logo.png" alt="Mehfil">
+                    <img class="brand-logo brand-logo--color" src="/assets/logo.png" alt="" aria-hidden="true">
                 </a>
             </div>
 
@@ -74,7 +75,7 @@
                         <form class="search-input-wrapper" id="search-youtube">
                             <input type="text" placeholder="Enter URL or Song Name" name="query">
 
-                            <button type="submit" id="btn-search-youtube">
+                            <button type="submit" id="btn-search-youtube" aria-label="Search YouTube" title="Search YouTube">
                                 <span class="material-symbols-outlined">search</span>
                             </button>
                         </form>
@@ -148,9 +149,6 @@
                     <span class="material-symbols-outlined">repeat</span>
                 </button>
 
-                <button class="btn-player">
-                    <span class="material-symbols-outlined">shuffle</span>
-                </button>
             </div>
         </footer>
     </div>

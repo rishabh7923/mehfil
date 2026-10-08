@@ -112,16 +112,35 @@ function updateRepeatButton() {
 function setupEventListeners() {
     /* Event Listener for Searching */
     const searchYoutube = document.getElementById("search-youtube")
+    const searchButton = document.getElementById("btn-search-youtube")
 
-    searchYoutube.addEventListener("submit", async (e) => {
+    searchYoutube?.addEventListener("submit", async (e) => {
         e.preventDefault()
-        const query = searchYoutube.elements.query.value
-        if (!query.trim()) return;
+        const query = searchYoutube.elements.query.value.trim()
+        if (!query || !searchButton) return
 
-        const res = await fetch(`/api/search?q=${query}`, { method: "GET" })
-        const data = await res.json()
+        const originalIcon = searchButton.innerHTML
+        searchButton.disabled = true
+        searchButton.setAttribute("aria-busy", "true")
+        searchButton.innerHTML = '<span class="material-symbols-outlined">progress_activity</span>'
 
-        renderSearchResults(data.results, handleAddSong)
+        try {
+            const params = new URLSearchParams({ q: query })
+            const res = await fetch(`/api/search?${params}`, { method: "GET" })
+            const data = await res.json()
+
+            if (!res.ok || !data.success) {
+                throw new Error(data.error || "Could not search YouTube")
+            }
+
+            renderSearchResults(data.results || [], handleAddSong)
+        } catch (error) {
+            console.error("YouTube search failed:", error)
+        } finally {
+            searchButton.disabled = false
+            searchButton.removeAttribute("aria-busy")
+            searchButton.innerHTML = originalIcon
+        }
     })
 
 
