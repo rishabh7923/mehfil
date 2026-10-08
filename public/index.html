@@ -22,10 +22,13 @@
         </p>
 
         <form class="room-launcher">
-            <input type="text" class="room-launcher__input input-field" placeholder="Room code" name="code"
-                aria-label="Room code" minlength="2" maxlength="32" pattern="[A-Za-z0-9_-]{2,32}" autocomplete="off"
-                required>
-            <button type="submit" class="room-launcher__button btn btn-primary">Launch Room</button>
+            <div class="room-launcher__field">
+                <span class="room-launcher__prefix" aria-hidden="true">mehfil.today/</span>
+                <input type="text" class="room-launcher__input" placeholder="enter name" name="code"
+                    aria-label="Room code" minlength="2" maxlength="32" pattern="[A-Za-z0-9_-]{2,32}"
+                    autocomplete="off" required>
+            </div>
+            <button type="submit" class="room-launcher__button btn btn-primary">CREATE</button>
         </form>
     </main>
 

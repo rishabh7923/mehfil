@@ -46,19 +46,48 @@
 
 .room-launcher {
     display: flex;
+    width: min(100%, 738px);
+    height: 50px;
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--surface-container-lowest);
 
-    .room-launcher__button {
-        border-radius: 0;
-        border-width: 1px 1px 1px 0px;
-        border-color: var(--border-subtle);
+    .room-launcher__field {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        padding-left: 16px;
+    }
+
+    .room-launcher__prefix {
+        color: #8b8b8b;
+        font-size: 20px;
+        white-space: nowrap;
     }
 
     .room-launcher__input {
-        width: min(300px, 60vw);
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        padding: 0 8px;
+        color: var(--text-secondary);
+        font: 700 20px var(--font-body);
+    }
+
+    .room-launcher__input::placeholder {
+        color: var(--text-secondary);
+        opacity: 1;
+    }
+
+    .room-launcher__button {
+        min-width: 112px;
+        border: 0;
         border-radius: 0;
-        border-width: 1px 0px 1px 1px;
-        border-color: var(--border-subtle);
-        border-style: solid;
+        font-size: 15px;
+        letter-spacing: 0.02em;
     }
 }
 
@@ -100,14 +129,21 @@
 
     .room-launcher {
         width: 100%;
+        height: 48px;
 
         .room-launcher__input {
             width: 100%;
             min-width: 0;
         }
 
+        .room-launcher__prefix {
+            font-size: 14px;
+        }
+
         .room-launcher__button {
+            min-width: 88px;
             white-space: nowrap;
+            font-size: 12px;
         }
     }
 
