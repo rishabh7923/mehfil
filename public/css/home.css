@@ -148,6 +148,6 @@
     }
 
     .app-preview {
-        width: calc(100% - 32px);
+        display: none;
     }
 }
