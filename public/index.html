@@ -15,19 +15,21 @@
     <!-- Hero Container -->
     <main class="hero-container">
 
-        <img class="hero-image" src="/assets/logo.png" alt="">
+        <img class="hero-image" src="/assets/logo.png" alt="Mehfil">
 
         <p class="hero-subtitle">
             Gaane wahi, mehfil nayi. — “The songs stay, the gathering changes.”
         </p>
 
         <form class="room-launcher">
-            <input type="text" class="room-launcher__input input-field" placeholder="mehfil.today/code" name="code">
+            <input type="text" class="room-launcher__input input-field" placeholder="Room code" name="code"
+                aria-label="Room code" minlength="2" maxlength="32" pattern="[A-Za-z0-9_-]{2,32}" autocomplete="off"
+                required>
             <button type="submit" class="room-launcher__button btn btn-primary">Launch Room</button>
         </form>
     </main>
 
-    <img class="app-preview" src="assets/room.png" alt="">
+    <img class="app-preview" src="/assets/room.png" alt="Mehfil room preview">
 
     <!-- Toast Container -->
     <div id="toast-container"></div>

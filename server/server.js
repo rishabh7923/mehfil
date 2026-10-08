@@ -2,7 +2,7 @@ import express from "express"
 import path from "path"
 import dotenv from "dotenv"
 
-import { roomManager } from "./roomManager.js"
+import { normalizeRoomCode, roomManager } from "./roomManager.js"
 import { fileURLToPath } from 'url'
 import { createServer } from "node:http"
 import { Server } from "socket.io"
@@ -30,8 +30,27 @@ setupSocketIO(io)
  * Create a new room
  */
 app.post("/api/rooms", (req, res) => {
-    const { room_code: roomCode } = req.body;
+    const roomCode = normalizeRoomCode(req.body?.room_code)
+    if (!roomCode) {
+        return res.status(400).json({
+            success: false,
+            error: "Enter a room code using 2-32 letters, numbers, hyphens, or underscores."
+        })
+    }
+
+    if (roomManager.getRoom(roomCode)) {
+        return res.status(200).json({
+            success: true,
+            existing: true,
+            room_code: roomCode,
+            redirect_url: `/room/${roomCode}`
+        })
+    }
+
     const room = roomManager.createRoom(roomCode)
+    if (!room) {
+        return res.status(400).json({ success: false, error: "Invalid room code." })
+    }
 
     console.log(`[API]: Room created with code (${room.code})`)
 

@@ -1,10 +1,33 @@
+export function normalizeRoomCode(value) {
+    if (typeof value !== "string") return ""
+
+    let code = value.trim()
+    if (!code) return ""
+
+    try {
+        const parsedUrl = new URL(code.includes("://") ? code : `https://${code}`)
+        const pathParts = parsedUrl.pathname.split("/").filter(Boolean)
+        if (pathParts[0]?.toLowerCase() === "room") {
+            code = pathParts[1] || ""
+        } else if (pathParts.length === 1 && parsedUrl.hostname !== code) {
+            code = pathParts[0]
+        }
+    } catch {
+        // Treat plain room codes as-is; validation below handles malformed values.
+    }
+
+    code = code.replace(/^\/+|\/+$/g, "").trim().toUpperCase()
+    return /^[A-Z0-9_-]{2,32}$/.test(code) ? code : ""
+}
+
 export class RoomManager {
     constructor() {
         this.rooms = new Map()
     }
 
     createRoom(roomCode = '') {
-        const code = roomCode.trim().toUpperCase()
+        const code = normalizeRoomCode(roomCode)
+        if (!code) return null
 
         const room = {
             code,
