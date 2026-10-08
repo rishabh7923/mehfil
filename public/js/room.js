@@ -1,5 +1,5 @@
 import { getOrCreateUserId, getRoomCodeFromUrl, getStoredUsername } from "./config.js"
-import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, getSocket, joinRoom, reorderQueue } from "./socket.js"
+import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, emitRepeatMode, getSocket, joinRoom, reorderQueue } from "./socket.js"
 import { renderQueue, renderSearchResults, renderUsersList } from "./ui.js"
 import { getCurrentPlayerTime, getPlayerDuration, getPlayerVolume, initYoutubePlayer, setPlayerVolume, syncPlayerWithServer } from "./player.js"
 
@@ -11,6 +11,7 @@ let hostId = null
 let currentQueue = []
 let currentSong = null
 let currentUsersList = []
+let repeatMode = "off"
 
 document.addEventListener("DOMContentLoaded", () => {
     roomCode = getRoomCodeFromUrl()
@@ -53,8 +54,7 @@ async function connectAndInitRoom() {
     currentQueue = roomData.queue || []
     currentSong = roomData.currentSong
     currentUsersList = roomData.users || []
-
-    //Show toast "Connected to room ${roomCode}"
+    repeatMode = roomData.repeatMode || "off"
 
     await initYoutubePlayer(roomCode, () => {
         emitPlayerNext(roomCode)
@@ -62,6 +62,7 @@ async function connectAndInitRoom() {
     
     renderUsersList(currentUsersList, currentUserId, hostId)
     renderQueue(currentQueue, currentSong, currentUserId, hostId)
+    updateRepeatButton()
     syncPlayerWithServer(currentSong, roomData.playbackState)
 
     socket.on("room:users", ({ users, hostId: newHostId }) => {
@@ -85,6 +86,27 @@ async function connectAndInitRoom() {
         currentSong = newSong
         syncPlayerWithServer(currentSong, playbackState)
     })
+
+    socket.on("player:repeat", ({ repeatMode: newRepeatMode }) => {
+        repeatMode = newRepeatMode
+        updateRepeatButton()
+    })
+}
+
+function updateRepeatButton() {
+    const repeatButton = document.getElementById("btn-repeat")
+    const repeatIcon = repeatButton?.querySelector(".material-symbols-outlined")
+    if (!repeatButton || !repeatIcon) return
+
+    const labels = {
+        off: "Repeat off",
+        queue: "Repeat queue",
+        song: "Repeat song"
+    }
+    repeatIcon.textContent = repeatMode === "song" ? "repeat_one" : "repeat"
+    repeatButton.setAttribute("aria-label", labels[repeatMode])
+    repeatButton.setAttribute("aria-pressed", String(repeatMode !== "off"))
+    repeatButton.dataset.active = String(repeatMode !== "off")
 }
 
 function setupEventListeners() {
@@ -124,6 +146,14 @@ function setupEventListeners() {
     const prevButton = document.getElementById("btn-player-prev")
     prevButton?.addEventListener("click", () => {
         emitPlayerSeek(roomCode, 0)
+    })
+
+    /* Repeat */
+    const repeatButton = document.getElementById("btn-repeat")
+    repeatButton?.addEventListener("click", () => {
+        const modes = ["off", "queue", "song"]
+        const nextMode = modes[(modes.indexOf(repeatMode) + 1) % modes.length]
+        emitRepeatMode(roomCode, nextMode)
     })
 
     /* Volume */

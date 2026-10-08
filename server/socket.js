@@ -150,6 +150,16 @@ export function setupSocketIO(io) {
             callback?.({ success: true, currentSong })
         })
 
+        socket.on("player:repeat", ({ roomCode, repeatMode }) => {
+            const code = roomCode || socket.roomCode
+            const room = roomManager.getRoom(code)
+            const validModes = ["off", "queue", "song"]
+            if (!room || !validModes.includes(repeatMode)) return
+
+            room.repeatMode = repeatMode
+            io.to(code).emit("player:repeat", { repeatMode })
+        })
+
         socket.on("queue:reorder", ({ roomCode, fromIndex, toIndex }, callback) => {
             const code = roomCode || socket.roomCode;
             const room = roomManager.getRoom(code);

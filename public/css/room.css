@@ -173,6 +173,10 @@ main {
         color: var(--text-secondary);
         padding: 2px;
     }
+
+    .btn-player[data-active="true"] {
+        color: var(--active-state);
+    }
 }
 
 .control-left,

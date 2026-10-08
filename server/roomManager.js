@@ -35,6 +35,7 @@ export class RoomManager {
             users: new Map(),
             queue: [],
             currentSong: null,
+            repeatMode: "off",
             playbackState: {
                 videoId: null,
                 startedAt: null,
@@ -150,6 +151,7 @@ export class RoomManager {
             users: Array.from(room.users.values()),
             queue: room.queue,
             currentSong: room.currentSong,
+            repeatMode: room.repeatMode,
             playbackState: {
                 ...room.playbackState,
                 currentPosition
@@ -188,7 +190,30 @@ export class RoomManager {
 
         const previousSong = room.currentSong
 
+        if (room.repeatMode === "song" && room.currentSong) {
+            room.playbackState = {
+                videoId: room.currentSong.videoId,
+                startedAt: Date.now(),
+                pausedAt: 0,
+                isPlaying: true
+            }
+            return { previousSong, currentSong: room.currentSong }
+        }
+
+        if (room.repeatMode === "queue" && room.currentSong && room.queue.length === 0) {
+            room.playbackState = {
+                videoId: room.currentSong.videoId,
+                startedAt: Date.now(),
+                pausedAt: 0,
+                isPlaying: true
+            }
+            return { previousSong, currentSong: room.currentSong }
+        }
+
         if (room.queue.length > 0) {
+            if (room.repeatMode === "queue" && room.currentSong) {
+                room.queue.push(room.currentSong)
+            }
             room.currentSong = room.queue.shift()
             room.playbackState = {
                 videoId: room.currentSong.videoId,

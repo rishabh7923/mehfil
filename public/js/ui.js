@@ -10,7 +10,7 @@ export function renderQueue(queue, currentSong, currentUserId, hostId, onRemoveC
         }
         
         item.innerHTML = `
-            <span class="material-symbols-outlined queue-row-icon">music_note</span>
+            <span class="material-symbols-outlined queue-row-icon">${active ? "play_arrow" : "music_note"}</span>
                 <div class="queue-item-title">
                     ${song.title}
                 </div>

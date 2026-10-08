@@ -61,3 +61,7 @@ export function emitPlayerNext(roomCode) {
         socket?.emit("player:next", { roomCode }, (res) => resolve(res))
     })
 }
+
+export function emitRepeatMode(roomCode, repeatMode) {
+    socket?.emit("player:repeat", { roomCode, repeatMode })
+}
