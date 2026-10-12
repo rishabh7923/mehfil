@@ -1,0 +1,16 @@
+{
+    "name": "Mehfil",
+    "short_name": "Mehfil",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#064e3b",
+    "theme_color": "#064e3b",
+    "icons": [
+        {
+            "src": "/assets/tinylogo.jpeg",
+            "sizes": "180x180",
+            "type": "image/jpeg",
+            "purpose": "any"
+        }
+    ]
+}
