@@ -18,10 +18,18 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd home/rishabh/mehfil
+            set -e
+
+            export NVM_DIR="/root/.nvm"
+            . "$NVM_DIR/nvm.sh"
+            nvm use 24.18.0
+
+            echo "Node: $(node -v)"
+            echo "npm: $(npm -v)"
+            echo "PM2: $(pm2 -v)"
+
+            cd /home/rishabh/mehfil
 
             git pull origin main
-
             npm install
-
             pm2 restart mehfil
