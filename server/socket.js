@@ -180,6 +180,25 @@ export function setupSocketIO(io) {
             }
         })
 
+        socket.on("queue:remove", ({ roomCode, index, songId }, callback) => {
+            const code = roomCode || socket.roomCode;
+            const room = roomManager.getRoom(code);
+            if (!room) return callback?.({ error: "Room not found" });
+
+            const success = roomManager.removeSong(code, index, songId);
+            if (success) {
+                const roomData = roomManager.getPublicRoomData(code);
+                io.to(code).emit("queue:update", {
+                    queue: roomData.queue,
+                    currentSong: roomData.currentSong,
+                    playbackState: roomData.playbackState
+                });
+                callback?.({ success: true });
+            } else {
+                callback?.({ error: "Failed to remove song from queue" });
+            }
+        })
+
 
         socket.on("disconnect", () => {
             console.log(`[Socket] Client diconnected ${socket.id}`)

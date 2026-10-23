@@ -1,5 +1,5 @@
 import { getOrCreateUserId, getRoomCodeFromUrl, getStoredUsername } from "./config.js"
-import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, emitRepeatMode, getSocket, joinRoom, reorderQueue } from "./socket.js"
+import { addSongToQueue, emitPlayerNext, emitPlayerPause, emitPlayerPlay, emitPlayerSeek, emitRepeatMode, getSocket, joinRoom, removeSongFromQueue, reorderQueue } from "./socket.js"
 import { renderQueue, renderSearchResults, renderUsersList } from "./ui.js"
 import { getCurrentPlayerTime, getPlayerDuration, getPlayerVolume, initYoutubePlayer, setPlayerVolume, syncPlayerWithServer } from "./player.js"
 
@@ -32,6 +32,14 @@ async function handleAddSong(song) {
     await addSongToQueue(roomCode, song)
 }
 
+async function handleRemoveSong(index, song) {
+    try {
+        await removeSongFromQueue(roomCode, index, song?.id)
+    } catch (error) {
+        console.error("Failed to remove song from queue:", error)
+    }
+}
+
 async function connectAndInitRoom() {
     const socket = getSocket()
 
@@ -61,7 +69,7 @@ async function connectAndInitRoom() {
     })
     
     renderUsersList(currentUsersList, currentUserId, hostId)
-    renderQueue(currentQueue, currentSong, currentUserId, hostId)
+    renderQueue(currentQueue, currentSong, currentUserId, hostId, handleRemoveSong)
     updateRepeatButton()
     syncPlayerWithServer(currentSong, roomData.playbackState)
 
@@ -76,7 +84,7 @@ async function connectAndInitRoom() {
         currentQueue = queue || []
         currentSong = newSong
 
-        renderQueue(currentQueue, currentSong, currentUserId, hostId) //handleRemoveSong, handleReorderQueue
+        renderQueue(currentQueue, currentSong, currentUserId, hostId, handleRemoveSong)
         syncPlayerWithServer(currentSong, playbackState)
     })
 

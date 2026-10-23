@@ -11,11 +11,26 @@ export function renderQueue(queue, currentSong, currentUserId, hostId, onRemoveC
         
         item.innerHTML = `
             <span class="material-symbols-outlined queue-row-icon">${active ? "play_arrow" : "music_note"}</span>
-                <div class="queue-item-title">
-                    ${song.title}
-                </div>
-            <div class="queue-item-time">${song.durationFormatted}</div> 
+            <div class="queue-item-title">${song.title}</div>
+            <div class="queue-item-right">
+                <span class="queue-item-time">${song.durationFormatted}</span>
+                ${!active ? `
+                <div class="queue-item-actions">
+                    <button class="queue-action-btn queue-action-remove" type="button" title="Remove from queue" aria-label="Remove from queue" draggable="false">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>` : ''}
+            </div>
         `
+
+        if (!active && onRemoveCallback) {
+            const removeBtn = item.querySelector(".queue-action-remove")
+            removeBtn?.addEventListener("mousedown", (e) => e.stopPropagation())
+            removeBtn?.addEventListener("click", (e) => {
+                e.stopPropagation()
+                onRemoveCallback(index, song)
+            })
+        }
 
         return item
     }

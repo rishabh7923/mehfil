@@ -43,6 +43,20 @@ export function reorderQueue(roomCode, fromIndex, toIndex) {
     })
 }
 
+export function removeSongFromQueue(roomCode, index, songId) {
+    return new Promise((resolve, reject) => {
+        if (!socket) return reject(new Error("Socket not initialized"));
+
+        socket.emit("queue:remove", { roomCode, index, songId }, (response) => {
+            if (response && response.error) {
+                reject(new Error(response.error));
+            } else {
+                resolve(response);
+            }
+        });
+    });
+}
+
 export function emitPlayerPlay(roomCode, position) {
     socket?.emit("player:play", { roomCode, position })
 }

@@ -88,6 +88,16 @@
         border-radius: 0;
         font-size: 15px;
         letter-spacing: 0.02em;
+        transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .room-launcher__button:hover {
+        background-color: #00530e;
+    }
+
+    .room-launcher__button:active {
+        background-color: #003e0a;
+        transform: scale(0.98);
     }
 }
 

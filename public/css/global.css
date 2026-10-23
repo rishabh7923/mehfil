@@ -111,6 +111,11 @@ h6 {
   color: var(--text-primary);
 }
 
+.btn:active {
+  background: var(--surface-dim);
+  transform: scale(0.98);
+}
+
 .btn-primary {
   background: var(--active-state);
   color: #ffffff;
@@ -122,6 +127,12 @@ h6 {
   background: #00530e;
   border-color: #00530e;
   color: #ffffff;
+}
+
+.btn-primary:active {
+  background: #003e0a;
+  border-color: #003e0a;
+  transform: scale(0.98);
 }
 
 

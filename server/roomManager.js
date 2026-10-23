@@ -251,6 +251,29 @@ export class RoomManager {
         room.queue.splice(toIndex, 0, movedItem)
         return true
     }
+
+    removeSong(roomCode, index, songId) {
+        const room = this.getRoom(roomCode);
+        if (!room) return false;
+
+        let targetIndex = -1;
+        if (songId) {
+            targetIndex = room.queue.findIndex(item => item.id === songId);
+        }
+        if (targetIndex === -1 && index !== undefined && index !== null) {
+            const numIndex = Number(index);
+            if (!Number.isNaN(numIndex) && numIndex >= 0 && numIndex < room.queue.length) {
+                targetIndex = numIndex;
+            }
+        }
+
+        if (targetIndex < 0 || targetIndex >= room.queue.length) {
+            return false;
+        }
+
+        const [removedItem] = room.queue.splice(targetIndex, 1);
+        return removedItem || true;
+    }
 }
 
 export const roomManager = new RoomManager()
