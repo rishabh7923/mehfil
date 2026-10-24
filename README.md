@@ -20,9 +20,8 @@ Sometimes, keeping things simple is the best engineering decision.
 
 ## 📸 Preview
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/543fb5f9-0370-42e5-ac09-0f0acdba59ae" alt="Mefil — Listen Together application preview" width="100%" />
-</p>
+<img width="1648" height="906" alt="image" src="https://github.com/user-attachments/assets/0f5eba8d-607f-4ced-89e6-d55cf0e56352" />
+
 
 <p align="center">
   <em>A glimpse into the Mefil listening experience.</em>
