@@ -66,7 +66,6 @@ export function emitPlayerPause(roomCode, position) {
 }
 
 export function emitPlayerSeek(roomCode, position) {
-    console.log("PLAY THE SONG")
     socket?.emit("player:seek", { roomCode, position })
 }
 

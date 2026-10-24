@@ -6,7 +6,6 @@ import { getCurrentPlayerTime, getPlayerDuration, getPlayerVolume, initYoutubePl
 let roomCode = null
 let currentUserId = null
 let currentUserName = null
-let isHost = null
 let hostId = null
 let currentQueue = []
 let currentSong = null
@@ -16,7 +15,7 @@ let repeatMode = "off"
 document.addEventListener("DOMContentLoaded", () => {
     roomCode = getRoomCodeFromUrl()
 
-    if (!roomCode) { }
+    if (!roomCode) return
 
     currentUserId = getOrCreateUserId()
     currentUserName = getStoredUsername()
@@ -55,9 +54,8 @@ async function connectAndInitRoom() {
     }
 
     const { user, roomData } = response
-    console.log(roomData)
+    console.log("[Room] Joined:", roomData.code)
 
-    isHost = user.isHost
     hostId = roomData.hostId
     currentQueue = roomData.queue || []
     currentSong = roomData.currentSong
@@ -89,8 +87,6 @@ async function connectAndInitRoom() {
     })
 
     socket.on("player:state", ({ playbackState, currentSong: newSong }) => {
-        console.log("PLAYER:UPDATE", { playbackState, newSong, })
-        
         currentSong = newSong
         syncPlayerWithServer(currentSong, playbackState)
     })

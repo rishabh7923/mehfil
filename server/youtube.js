@@ -12,7 +12,7 @@ export async function searchYoutube(query, maxResult = 20) {
             videoId: vid.videoId,
             title: vid.title || 'Untitled',
             channelTitle: vid.author.name || 'Unknown',
-            thumbnail: vid.thumbnail || `https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg`,
+            thumbnail: vid.thumbnail || `https://i.ytimg.com/vi/${vid.videoId}/hqdefault.jpg`,
             duration: vid.seconds || 0,
             durationFormatted: vid.timestamp
         }

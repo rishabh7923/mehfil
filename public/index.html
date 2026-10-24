@@ -10,9 +10,14 @@
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Mehfil">
-    <meta name="theme-color" content="#064e3b">
+    <meta name="theme-color" content="#103423">
 
-    <title>Mehfil</title>
+    <title>Mehfil — Gane Vahi Par Mehfil Nayi</title>
+
+    <!-- Google Fonts: Newsreader & Hanken Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="/css/global.css">
@@ -20,29 +25,106 @@
 </head>
 
 <body class="home-page">
-    <!-- Hero Container -->
+    <!-- Top Navigation Bar -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="header-logo-badge" aria-label="Mehfil Home">
+                <img src="/assets/tinylogo.jpeg" alt="Mehfil Logo" class="header-logo-icon">
+            </a>
+            <button type="button" class="btn-create-join" id="openRoomModalBtn">
+                Create/Join Room
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
     <main class="hero-container">
+        <!-- Floating Music & Sparkle Doodles -->
+        <div class="hero-doodles" aria-hidden="true">
+            <!-- Left upper sparkle -->
+            <img src="/assets/icons/sparkle.svg" class="doodle doodle--sparkle-1" alt="">
+            <!-- Left middle headphones -->
+            <img src="/assets/icons/headphones.svg" class="doodle doodle--headphones-1" alt="">
+            <!-- Left lower sparkle -->
+            <img src="/assets/icons/sparkle.svg" class="doodle doodle--sparkle-2" alt="">
+            
+            <!-- Top right vinyl record -->
+            <img src="/assets/icons/vinyl-record.svg" class="doodle doodle--record" alt="">
+            <!-- Right middle music note -->
+            <img src="/assets/icons/music-note.svg" class="doodle doodle--note-1" alt="">
+            <!-- Right lower headphones -->
+            <img src="/assets/icons/headphones.svg" class="doodle doodle--headphones-2" alt="">
+            <!-- Far right equalizer bars -->
+            <img src="/assets/icons/equalizer.svg" class="doodle doodle--equalizer" alt="">
+            <!-- Bottom center-right sparkle under preview -->
+            <img src="/assets/icons/sparkle.svg" class="doodle doodle--sparkle-3" alt="">
+        </div>
 
-        <img class="hero-image" src="/assets/logo.png" alt="Mehfil">
+        <!-- Main Title -->
+        <h1 class="hero-title">
+            <span class="hero-title__line hero-title__line--1">
+                <img src="/assets/icons/filled-music-note.svg" class="title-decor title-decor--note" alt="" aria-hidden="true">
+                <span class="title-text-1">Gane Vahi Par</span>
+            </span>
+            <span class="hero-title__line hero-title__line--2">
+                <span class="logo-word-wrapper">
+                    <img src="/assets/logo.png" alt="mehfil" class="hero-logo-img">
+                    <svg class="mehfil-underline" viewBox="0 0 210 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M3 6.5 C 50 11.5 140 11 204 6.5" stroke="#BA8435" stroke-width="3.6" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <span class="title-word-nayi">Nayi</span>
+                <img src="/assets/icons/star-fall.svg" class="title-decor title-decor--star" alt="" aria-hidden="true">
+            </span>
+        </h1>
 
+        <!-- Subtitle -->
         <p class="hero-subtitle">
-            Gaane wahi, mehfil nayi. — “The songs stay, the gathering changes.”
+            “The songs stay, the gathering changes.”
         </p>
 
-        <form class="room-launcher">
-            <div class="room-launcher__field">
-                <span class="room-launcher__prefix" aria-hidden="true">mehfil.today/</span>
-                <input type="text" class="room-launcher__input" placeholder="enter name" name="code"
-                    aria-label="Room code" minlength="2" maxlength="32" pattern="[A-Za-z0-9_-]{2,32}"
-                    autocomplete="off" required>
+        <!-- Product Preview Showcase -->
+        <div class="mockup-showcase">
+            <img class="mockup-pixel-cat" src="/assets/sprite-animation.gif" alt="Mehfil sleeping pixel cat mascot" width="96" height="71" title="Zzz... Meow!">
+            <img class="mockup-desktop" src="/assets/screenshots/desktop.png" alt="Mehfil collaborative room desktop preview">
+            <div class="mockup-mobile-wrapper">
+                <img class="mockup-mobile" src="/assets/screenshots/mobile.png" alt="Mehfil mobile responsive preview">
             </div>
-            <button type="submit" class="room-launcher__button btn btn-primary">CREATE</button>
-        </form>
+        </div>
     </main>
 
-    <img class="app-preview" src="/assets/room.png" alt="Mehfil room preview">
+    <!-- Create / Join Room Modal -->
+    <div class="room-modal" id="roomModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="room-modal__backdrop" id="roomModalBackdrop"></div>
+        <div class="room-modal__card">
+            <button type="button" class="room-modal__close" id="closeRoomModalBtn" aria-label="Close dialog">&times;</button>
+            
+            <div class="room-modal__header">
+                <img src="/assets/tinylogo.jpeg" alt="" class="room-modal__logo-icon">
+                <h2 class="room-modal__title" id="modalTitle">Create or Join Room</h2>
+                <p class="room-modal__desc">Enter a room name to start or join a gathering with your friends.</p>
+            </div>
 
-    <!-- Toast Container -->
+            <form class="room-launcher" id="roomLauncherForm">
+                <div class="room-launcher__field">
+                    <span class="room-launcher__prefix" aria-hidden="true">mehfil.today/</span>
+                    <input type="text" class="room-launcher__input" id="roomCodeInput" placeholder="enter name" name="code"
+                        aria-label="Room code" minlength="2" maxlength="32" pattern="[A-Za-z0-9_-]{2,32}"
+                        autocomplete="off" required>
+                </div>
+                <button type="submit" class="room-launcher__button">LAUNCH ROOM</button>
+            </form>
+
+            <div class="room-modal__footer">
+                <button type="button" class="room-modal__quick-btn" id="randomRoomBtn">
+                    <span class="material-symbols-outlined">shuffle</span>
+                    <span>Create Random Room</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
     <div id="toast-container"></div>
 
     <script src="/js/home.js"></script>

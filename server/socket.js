@@ -57,7 +57,6 @@ export function setupSocketIO(io) {
             if (!result) return callback?.({ error: "Failed to add song to queue "});
 
             const roomData = roomManager.getPublicRoomData(code)
-            console.log(roomData)
 
             io.to(code).emit("queue:update", {
                 queue: roomData.queue,
@@ -73,7 +72,6 @@ export function setupSocketIO(io) {
             const room = roomManager.getRoom(code)
             if (!room || !room.currentSong) return
 
-            const user = room.users.get(socket.id)
             const updatedState = roomManager.updatePlayback(code, { action: "play", position, isPlaying: true })
 
             if (updatedState) {
@@ -82,8 +80,7 @@ export function setupSocketIO(io) {
                         ...updatedState,
                         currentPosition: position
                     },
-                    currentSong: room.currentSong,
-                    triggerdBy: user?.name || "System"
+                    currentSong: room.currentSong
                 })
             }
         })
@@ -93,7 +90,6 @@ export function setupSocketIO(io) {
             const room = roomManager.getRoom(code)
             if (!room || !room.currentSong) return
 
-            const user = room.users.get(socket.id)
             const updatedState = roomManager.updatePlayback(code, { action: "seek", position })
 
             if (updatedState) {
@@ -102,8 +98,7 @@ export function setupSocketIO(io) {
                         ...updatedState,
                         currentPosition: position
                     },
-                    currentSong: room.currentSong,
-                    triggerdBy: user?.name || "System"
+                    currentSong: room.currentSong
                 })
             }
         })
@@ -113,10 +108,7 @@ export function setupSocketIO(io) {
             const room = roomManager.getRoom(code)
             if (!room || !room.currentSong) return
 
-            const user = room.users.get(socket.id)
             const updatedState = roomManager.updatePlayback(code, { action: "pause", position, isPlaying: false })
-
-            console.log(updatedState)
 
             if (updatedState) {
                 io.to(code).emit("player:state", {
@@ -124,8 +116,7 @@ export function setupSocketIO(io) {
                         ...updatedState,
                         currentPosition: position
                     },
-                    currentSong: room.currentSong,
-                    triggerdBy: user?.name || "System"
+                    currentSong: room.currentSong
                 })
             }
         })
@@ -136,8 +127,7 @@ export function setupSocketIO(io) {
 
             if (!room) return null
 
-            const user = room.users.get(socket.id)
-            const { previousSong, currentSong } = roomManager.skipSong(code);
+            const { currentSong } = roomManager.skipSong(code);
 
             const roomData = roomManager.getPublicRoomData(code);
 
@@ -165,7 +155,6 @@ export function setupSocketIO(io) {
             const room = roomManager.getRoom(code);
             if (!room) return;
 
-            const user = room.users.get(socket.id);
             const success = roomManager.reorderQueue(code, fromIndex, toIndex)
 
             if (success) {

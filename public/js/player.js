@@ -3,7 +3,7 @@ import { emitPlayerNext } from "./socket.js"
 let ytPlayer = null
 let currentRoomCode = null
 let currentSongId = null
-let isPlayerReady = true
+let isPlayerReady = false
 let updateTimer = null
 let playerVolume = 100
 
